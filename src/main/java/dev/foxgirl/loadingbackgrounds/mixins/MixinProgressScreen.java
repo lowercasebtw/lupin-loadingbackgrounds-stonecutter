@@ -14,9 +14,9 @@ public abstract class MixinProgressScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(final GuiGraphics context, final int mouseX, final int mouseY, final float delta) {
-        if (!LoadingBackgrounds.getInstance().draw(context, this, false)) {
-            super.renderBackground(context, mouseX, mouseY, delta);
+    public void renderBackground(final GuiGraphics graphics, final int mouseX, final int mouseY, final float delta) {
+        if (!LoadingBackgrounds.getInstance().draw(graphics, this, false)) {
+            super.renderBackground(graphics, mouseX, mouseY, delta);
         }
     }
 }

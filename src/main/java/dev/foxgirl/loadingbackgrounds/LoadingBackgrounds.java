@@ -101,7 +101,7 @@ public final class LoadingBackgrounds extends Screen {
         height = screen.height;
     }
 
-    public boolean draw(final GuiGraphics context, final Screen screen, final boolean shouldDrawDefaultBackground) {
+    public boolean draw(final GuiGraphics graphics, final Screen screen, final boolean shouldDrawDefaultBackground) {
         double secondsNow = seconds();
         double secondsDiff = secondsNow - stateSecondsStarted;
         if (secondsDiff > Math.max(config.secondsStay(), config.secondsFade()) + 5.0D || textures == null) {
@@ -111,7 +111,7 @@ public final class LoadingBackgrounds extends Screen {
             textures = getBackgroundTextures();
             if (textures == null) {
                 if (shouldDrawDefaultBackground) {
-                    drawDefaultBackground(context, screen);
+                    drawDefaultBackground(graphics, screen);
                 }
                 return false;
             }
@@ -122,14 +122,14 @@ public final class LoadingBackgrounds extends Screen {
 
         boolean success;
         if (stateIsFading) {
-            success = drawCustomBackground(context, screen, texturePrevious, config.brightness(), 1.0F);
-            drawCustomBackground(context, screen, textureCurrent, config.brightness(), (float) Math.min(secondsDiff / config.secondsFade(), 1.0D));
+            success = drawCustomBackground(graphics, screen, texturePrevious, config.brightness(), 1.0F);
+            drawCustomBackground(graphics, screen, textureCurrent, config.brightness(), (float) Math.min(secondsDiff / config.secondsFade(), 1.0D));
             if (secondsDiff > config.secondsFade()) {
                 stateSecondsStarted = secondsNow;
                 stateIsFading = false;
             }
         } else {
-            success = drawCustomBackground(context, screen, textureCurrent, config.brightness(), 1.0F);
+            success = drawCustomBackground(graphics, screen, textureCurrent, config.brightness(), 1.0F);
             if (secondsDiff > config.secondsStay()) {
                 stateSecondsStarted = secondsNow;
                 stateIsFading = true;
@@ -139,13 +139,13 @@ public final class LoadingBackgrounds extends Screen {
         }
 
         if (!success && shouldDrawDefaultBackground) {
-            drawDefaultBackground(context, screen);
+            drawDefaultBackground(graphics, screen);
         }
 
         return success;
     }
 
-    public boolean drawCustomBackground(final GuiGraphics context, final Screen screen, final ResourceLocation texture, final float brightness, final float opacity) {
+    public boolean drawCustomBackground(final GuiGraphics graphics, final Screen screen, final ResourceLocation texture, final float brightness, final float opacity) {
         initFromScreen(screen);
         if (texture == null || texture.equals(MissingTextureAtlasSprite.getLocation())) {
             return false;
@@ -170,12 +170,10 @@ public final class LoadingBackgrounds extends Screen {
 
         float offsetX = 0.0F;
         float offsetY = 0.0F;
-        float scaleX = 1.0F;
-        float scaleY = 1.0F;
 
         // Calculate scale factors
-        scaleX = screenWidth / textureWidth;
-        scaleY = screenHeight / textureHeight;
+        float scaleX = screenWidth / textureWidth;
+        float scaleY = screenHeight / textureHeight;
 
         // Check if the texture aspect ratio matches the screen aspect ratio
         if (scaleX < scaleY) {
@@ -191,32 +189,31 @@ public final class LoadingBackgrounds extends Screen {
         RenderSystem.setShaderColor(brightness, brightness, brightness, opacity);
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
-        context.blit(texture, 0, 0, 0, offsetX, offsetY, (int) screenWidth, (int) screenHeight, (int) (textureWidth * scaleX), (int) (textureHeight * scaleY));
+        graphics.blit(texture, 0, 0, 0, offsetX, offsetY, (int) screenWidth, (int) screenHeight, (int) (textureWidth * scaleX), (int) (textureHeight * scaleY));
         RenderSystem.disableBlend();
-
         return true;
     }
 
-    public void drawDefaultBackground(final GuiGraphics context, final Screen screen) {
-        initFromScreen(screen);
-        drawDefaultBackgroundActual(context, screen);
+    public void drawDefaultBackground(final GuiGraphics graphics, final Screen screen) {
+        this.initFromScreen(screen);
+        this.drawDefaultBackgroundActual(graphics, screen);
     }
 
     /* Implementation for ~~1.20.5~~ 1.21.0 and higher */
-    private void drawDefaultBackgroundActual(final GuiGraphics context, final Screen screen) {
+    private void drawDefaultBackgroundActual(final GuiGraphics graphics, final Screen screen) {
         /*float delta = client.getRenderTickCounter().getLastDuration();
         if (client.world == null) {
-            renderPanoramaBackground(context, delta);
+            renderPanoramaBackground(graphics, delta);
         }
         applyBlur(delta);
-        renderDarkening(context);*/
+        renderDarkening(graphics);*/
     }
 
     /* Implementation for 1.20.4 and lower
-    private void drawDefaultBackgroundActual(DrawContext context, Screen screen) {
-        context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
-        context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0.0F, 0.0F, width, height, 32, 32);
-        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    private void drawDefaultBackgroundActual(DrawContext graphics, Screen screen) {
+        graphics.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
+        graphics.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0.0F, 0.0F, width, height, 32, 32);
+        graphics.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     } */
 
     private static final long secondsStart = System.nanoTime();

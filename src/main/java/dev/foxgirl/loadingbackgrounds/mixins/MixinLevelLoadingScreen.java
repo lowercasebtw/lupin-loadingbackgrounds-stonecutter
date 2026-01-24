@@ -32,11 +32,11 @@ public abstract class MixinLevelLoadingScreen extends Screen {
     private StoringChunkProgressListener progressListener;
 
     @ModifyVariable(method = "render", at = @At("STORE"), name = "i")
-    private int loadingbackgrounds$render$0(int x) {
+    private int loadingbackgrounds$render$0(final int x) {
         final Position position = LoadingBackgrounds.getInstance().getPosition();
         if (position != Position.CENTER) {
             final int width = this.width;
-            final int size = this.progressListener.getProgress();
+            final int size = this.progressListener.getDiameter();
             switch (position.ordinal()) {
                 case 1:
                 case 3:
@@ -51,11 +51,11 @@ public abstract class MixinLevelLoadingScreen extends Screen {
     }
 
     @ModifyVariable(method = "render", at = @At("STORE"), name = "j")
-    private int loadingbackgrounds$render$1(int y) {
+    private int loadingbackgrounds$render$1(final int y) {
         final Position position = LoadingBackgrounds.getInstance().getPosition();
         if (position != Position.CENTER) {
             final int height = this.height;
-            final int size = this.progressListener.getProgress();
+            final int size = this.progressListener.getDiameter();
             switch (position.ordinal()) {
                 case 1:
                 case 2:
