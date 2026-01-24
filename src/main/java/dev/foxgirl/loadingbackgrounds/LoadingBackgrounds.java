@@ -8,6 +8,8 @@ import dev.foxgirl.loadingbackgrounds.util.TextureInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+//? >=1.21.2
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -189,7 +191,16 @@ public final class LoadingBackgrounds extends Screen {
         RenderSystem.setShaderColor(brightness, brightness, brightness, opacity);
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
-        graphics.blit(texture, 0, 0, 0, offsetX, offsetY, (int) screenWidth, (int) screenHeight, (int) (textureWidth * scaleX), (int) (textureHeight * scaleY));
+        graphics.blit(
+            //? >=1.21.2
+            RenderType::guiTextured,
+            texture,
+            0, 0,
+            0, 0,
+            (int) offsetX, (int) offsetY,
+            (int) screenWidth, (int) screenHeight,
+            (int) (textureWidth * scaleX), (int) (textureHeight * scaleY)
+        );
         RenderSystem.disableBlend();
         return true;
     }
@@ -244,9 +255,9 @@ public final class LoadingBackgrounds extends Screen {
     private static String getProfileID(Pack profile) {
         //? >=1.20.5 {
         return profile.getId();
-        //? } else {
+        //?} else {
         /*return profile.getName();
-         *///? }
+         *///?}
     }
 
     private static boolean matchesProfileNamePattern(String name) {

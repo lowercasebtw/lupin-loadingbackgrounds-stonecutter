@@ -23,9 +23,9 @@ public final class LoadingBackgroundsClient implements ClientModInitializer {
         new LoadingBackgrounds().init(
             //? fabric {
             FabricLoader.getInstance().getConfigDir()
-            //? } else {
+            //?} else {
             /*FMLPaths.CONFIGDIR.get()
-             *///? }
+             *///?}
         );
     }
 }
