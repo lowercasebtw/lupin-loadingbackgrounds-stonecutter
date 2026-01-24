@@ -1,0 +1,20 @@
+{
+    "required": true,
+    "package": "dev.foxgirl.loadingbackgrounds.mixins",
+    "compatibilityLevel": "JAVA_8",
+    "client": [
+        "MixinConnectScreen",
+        "MixinDownloadingTerrainScreen",
+        "MixinLevelLoadingScreen",
+        "MixinGenericMessageScreen",
+      "MixinDynamicTexture",
+        "MixinProgressScreen",
+      "MixinSimpleTexture"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "mixinextras": {
+        "minVersion": "0.5.0"
+    }
+}
