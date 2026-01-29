@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-stonecutter active "1.21.3-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.21.4-fabric" /* [SC] DO NOT EDIT */
 
 stonecutter tasks {
     val ordering = Comparator

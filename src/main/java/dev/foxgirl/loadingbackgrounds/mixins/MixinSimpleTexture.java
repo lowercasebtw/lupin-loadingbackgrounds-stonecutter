@@ -9,8 +9,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(SimpleTexture.class)
 public abstract class MixinSimpleTexture extends AbstractTexture implements TextureInfo {
-   /*
-    @ModifyVariable(method = "load", at = @At(value = "STORE", ordinal = 1))
+   /*@ModifyVariable(method = "load", at = @At(value = "STORE", ordinal = 1))
     private ResourceManager loadingimages$onLoadTextureData(final ResourceManager value) {
         var image = resourceManager.ima.image;
         if (image != null) {

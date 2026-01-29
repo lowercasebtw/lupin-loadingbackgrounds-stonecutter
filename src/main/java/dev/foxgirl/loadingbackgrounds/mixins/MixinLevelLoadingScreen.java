@@ -1,6 +1,7 @@
 package dev.foxgirl.loadingbackgrounds.mixins;
 
-import dev.foxgirl.loadingbackgrounds.LoadingBackgrounds;
+import dev.foxgirl.loadingbackgrounds.LoadingBackgroundsScreen;
+import dev.foxgirl.loadingbackgrounds.util.DrawStatus;
 import dev.foxgirl.loadingbackgrounds.util.Position;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
@@ -15,14 +16,14 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(LevelLoadingScreen.class)
 public abstract class MixinLevelLoadingScreen extends Screen {
-
     private MixinLevelLoadingScreen(final Component title) {
         super(title);
     }
 
     @Override
     public void renderBackground(final GuiGraphics graphics, final int mouseX, final int mouseY, final float delta) {
-        if (!LoadingBackgrounds.getInstance().draw(graphics, this, false)) {
+        final DrawStatus status = LoadingBackgroundsScreen.getInstance().draw(graphics, this, false);
+        if (status == DrawStatus.FALLBACK) {
             super.renderBackground(graphics, mouseX, mouseY, delta);
         }
     }
@@ -33,7 +34,7 @@ public abstract class MixinLevelLoadingScreen extends Screen {
 
     @ModifyVariable(method = "render", at = @At("STORE"), name = "i")
     private int loadingbackgrounds$render$0(final int x) {
-        final Position position = LoadingBackgrounds.getInstance().getPosition();
+        final Position position = LoadingBackgroundsScreen.getInstance().getPosition();
         if (position != Position.CENTER) {
             final int width = this.width;
             final int size = this.progressListener.getDiameter();
@@ -52,7 +53,7 @@ public abstract class MixinLevelLoadingScreen extends Screen {
 
     @ModifyVariable(method = "render", at = @At("STORE"), name = "j")
     private int loadingbackgrounds$render$1(final int y) {
-        final Position position = LoadingBackgrounds.getInstance().getPosition();
+        final Position position = LoadingBackgroundsScreen.getInstance().getPosition();
         if (position != Position.CENTER) {
             final int height = this.height;
             final int size = this.progressListener.getDiameter();

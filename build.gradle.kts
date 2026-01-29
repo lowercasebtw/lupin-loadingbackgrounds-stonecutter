@@ -16,6 +16,8 @@ repositories {
     maven("https://maven.neoforged.net/releases") // NeoForge
     maven("https://maven.bawnorton.com/releases") // MixinSquared
     maven("https://maven.terraformersmc.com/") // Mod Menu
+    maven("https://maven.deftu.dev/releases") // Omnicore
+    maven("https://maven.deftu.dev/snapshots") // Omnicore
 }
 
 class ModData {
@@ -37,6 +39,7 @@ class ModData {
 
 class Dependencies {
     val fabricLoaderVersion = property("deps.fabric_loader_version") as String?
+    val omnicoreVersion = property("deps.omnicore_version") as String?
 
     val devAuthVersion = property("deps.devauth_version") as String?
     val lombokVersion = property("deps.lombok_version") as String?
@@ -149,6 +152,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok:${deps.lombokVersion}")
     annotationProcessor("org.projectlombok:lombok:${deps.lombokVersion}")
     modRuntimeOnly("me.djtheredstoner:DevAuth-${loader.name}:${deps.devAuthVersion}")
+
+    modImplementation("dev.deftu:omnicore-${mod.minecraftVersion}-${loader.name}:${deps.omnicoreVersion}")
 
     include(implementation("com.moulberry:mixinconstraints:${deps.mixinConstraintsVersion}")!!)!!
     include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-${loader.name}:${deps.mixinSquaredVersion}")!!)!!)

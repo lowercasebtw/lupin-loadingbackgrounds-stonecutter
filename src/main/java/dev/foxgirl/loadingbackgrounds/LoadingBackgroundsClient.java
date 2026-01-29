@@ -20,7 +20,7 @@ public final class LoadingBackgroundsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        new LoadingBackgrounds().init(
+        new LoadingBackgroundsScreen().init(
             //? fabric {
             FabricLoader.getInstance().getConfigDir()
             //?} else {
