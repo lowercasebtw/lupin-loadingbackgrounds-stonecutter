@@ -17,14 +17,12 @@ public abstract class MixinGenericMessageScreen extends Screen {
         super(title);
     }
 
+    // TODO/FIX
     @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
     private void loadingbackgrounds$replaceBackgroundRendering(final GuiGraphics graphics, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
         final DrawStatus status = LoadingBackgroundsScreen.getInstance().draw(graphics, this, true);
-        if (status == DrawStatus.FALLBACK || status == DrawStatus.FAILED) {
+        if (!LoadingBackgroundsScreen.isLoadingMessage(this.getTitle()) || status == DrawStatus.FAILED) {
             ci.cancel();
-        }
-
-        if (!LoadingBackgroundsScreen.isLoadingMessage(getTitle()) || status == DrawStatus.FALLBACK) {
             super.renderBackground(graphics, mouseX, mouseY, delta);
         }
     }

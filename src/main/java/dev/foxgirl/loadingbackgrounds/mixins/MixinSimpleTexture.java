@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(SimpleTexture.class)
 public abstract class MixinSimpleTexture extends AbstractTexture implements TextureInfo {
+    // TODO?
    /*@ModifyVariable(method = "load", at = @At(value = "STORE", ordinal = 1))
     private ResourceManager loadingimages$onLoadTextureData(final ResourceManager value) {
         var image = resourceManager.ima.image;
@@ -39,7 +40,12 @@ public abstract class MixinSimpleTexture extends AbstractTexture implements Text
     @Override
     public void loadingbackgrounds$init() {
         if (loadingbackgrounds$dataWidth <= 0 || loadingbackgrounds$dataHeight <= 0) {
-            this.bind();
+            //? >=1.21.5 {
+            com.mojang.blaze3d.opengl.GlStateManager._bindTexture(((com.mojang.blaze3d.opengl.GlTexture) this.texture).glId());
+            //?} else {
+            /*this.bind();
+             *///?}
+
             var buffer = new int[1];
 
             GL11.glGetTexLevelParameteriv(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH, buffer);
