@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,9 +51,9 @@ public final class LoadingBackgroundsScreen extends Screen {
     );
 
     private LoadingBackgroundsConfig config = LoadingBackgroundsConfig.DEFAULT;
-    private Iterator<ResourceLocation> textures;
-    private ResourceLocation texturePrevious;
-    private ResourceLocation textureCurrent;
+    private Iterator<Identifier> textures;
+    private Identifier texturePrevious;
+    private Identifier textureCurrent;
     private double stateSecondsStarted = secondsSinceStart();
     private boolean stateIsFading = false;
 
@@ -138,7 +138,7 @@ public final class LoadingBackgroundsScreen extends Screen {
         }
     }
 
-    public boolean drawCustomBackground(final GuiGraphics graphics, final Screen screen, final ResourceLocation texture, final float brightness, final float opacity) {
+    public boolean drawCustomBackground(final GuiGraphics graphics, final Screen screen, final Identifier texture, final float brightness, final float opacity) {
         this.initFromScreen(screen);
         if (texture == null || texture.equals(MissingTextureAtlasSprite.getLocation())) {
             System.out.println("Failed to draw texture");
@@ -190,11 +190,11 @@ public final class LoadingBackgroundsScreen extends Screen {
         return (double) (System.nanoTime() - secondsStart) * 1.0E-9D;
     }
 
-    private Map<ResourceLocation, Resource> getBackgroundTextureResources() {
+    private Map<Identifier, Resource> getBackgroundTextureResources() {
         return OmniClient.getResourceManager().listResources("textures/gui/backgrounds", (filename) -> filename.getPath().endsWith(".png"));
     }
 
-    private Iterator<ResourceLocation> getBackgroundTextures() {
+    private Iterator<Identifier> getBackgroundTextures() {
         var resources = this.getBackgroundTextureResources();
         if (resources.isEmpty()) {
             resources = this.getBackgroundTextureResources();
@@ -204,7 +204,7 @@ public final class LoadingBackgroundsScreen extends Screen {
         }
 
         @SuppressWarnings({"unchecked", "rawtypes"})
-        final List<ResourceLocation> textures = (List) Arrays.asList(resources.keySet().toArray());
+        final List<Identifier> textures = (List) Arrays.asList(resources.keySet().toArray());
         Collections.shuffle(textures);
         return Iterators.cycle(textures);
     }
