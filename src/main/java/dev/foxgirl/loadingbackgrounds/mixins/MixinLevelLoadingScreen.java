@@ -35,7 +35,7 @@ public abstract class MixinLevelLoadingScreen extends Screen {
     private net.minecraft.server.level.progress.StoringChunkProgressListener levelLoadingProgress;
     *///?}
 
-    @ModifyVariable(method = "render", at = @At("STORE"), name = "i")
+    @ModifyVariable(method = "render", at = @At("STORE"), ordinal = 2)
     private int loadingbackgrounds$render$0(final int x) {
         final Position position = LoadingBackgroundsScreen.getInstance().getPosition();
         if (position != Position.CENTER) {
@@ -59,7 +59,7 @@ public abstract class MixinLevelLoadingScreen extends Screen {
         return x;
     }
 
-    @ModifyVariable(method = "render", at = @At("STORE"), name = "j")
+    @ModifyVariable(method = "render", at = @At("STORE"), ordinal = 3)
     private int loadingbackgrounds$render$1(final int y) {
         final Position position = LoadingBackgroundsScreen.getInstance().getPosition();
         if (position != Position.CENTER) {
