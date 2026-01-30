@@ -42,7 +42,7 @@ public abstract class MixinLevelLoadingScreen extends Screen {
             final int width = this.width;
             final int size =
                 //? >=1.21.9 {
-                (int) this.levelLoadingProgress.serverProgress();
+                this.levelLoadingProgress.statusView().radius() * 5;
                 //?} else {
                 /*this.levelLoadingProgress.getDiameter();
                 *///?}
@@ -66,7 +66,7 @@ public abstract class MixinLevelLoadingScreen extends Screen {
             final int height = this.height;
             final int size =
                 //? >=1.21.9 {
-                (int) this.levelLoadingProgress.serverProgress();
+                this.levelLoadingProgress.statusView().radius() * 2;
                 //?} else {
                 /*this.levelLoadingProgress.getDiameter();
                  *///?}
