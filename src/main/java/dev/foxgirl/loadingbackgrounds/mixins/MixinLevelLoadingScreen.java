@@ -6,9 +6,8 @@ import dev.foxgirl.loadingbackgrounds.util.Position;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.LevelLoadTracker;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.progress.StoringChunkProgressListener;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,16 +27,26 @@ public abstract class MixinLevelLoadingScreen extends Screen {
         }
     }
 
-    @Shadow
-    @Final
-    private StoringChunkProgressListener progressListener;
+    //? >=1.21.9 {
+    @Shadow(aliases = "loadTracker")
+    private LevelLoadTracker levelLoadingProgress;
+    //? } else {
+    /*@Shadow(aliases = "progressListener")
+    @org.spongepowered.asm.mixin.Final
+    private net.minecraft.server.level.progress.StoringChunkProgressListener; levelLoadingProgress;
+    *///? }
 
     @ModifyVariable(method = "render", at = @At("STORE"), name = "i")
     private int loadingbackgrounds$render$0(final int x) {
         final Position position = LoadingBackgroundsScreen.getInstance().getPosition();
         if (position != Position.CENTER) {
             final int width = this.width;
-            final int size = this.progressListener.getDiameter();
+            final int size =
+                //? >=1.21.9 {
+                (int) this.levelLoadingProgress.serverProgress();
+                //? } else {
+                /*this.levelLoadingProgress.getDiameter();
+                *///? }
             switch (position.ordinal()) {
                 case 1:
                 case 3:
@@ -56,7 +65,12 @@ public abstract class MixinLevelLoadingScreen extends Screen {
         final Position position = LoadingBackgroundsScreen.getInstance().getPosition();
         if (position != Position.CENTER) {
             final int height = this.height;
-            final int size = this.progressListener.getDiameter();
+            final int size =
+                //? >=1.21.9 {
+                (int) this.levelLoadingProgress.serverProgress();
+                //? } else {
+                /*this.levelLoadingProgress.getDiameter();
+                 *///? }
             switch (position.ordinal()) {
                 case 1:
                 case 2:
