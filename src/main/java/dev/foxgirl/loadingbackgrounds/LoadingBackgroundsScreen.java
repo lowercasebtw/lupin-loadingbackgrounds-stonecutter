@@ -2,8 +2,10 @@ package dev.foxgirl.loadingbackgrounds;
 
 import com.google.common.collect.Iterators;
 import dev.deftu.omnicore.api.client.OmniClient;
+import dev.deftu.omnicore.api.client.render.ImmediateScreenRenderer;
 import dev.deftu.omnicore.api.client.render.OmniRenderingContext;
 import dev.deftu.omnicore.api.client.render.pipeline.OmniRenderPipelines;
+import dev.deftu.omnicore.api.color.ColorFormat;
 import dev.deftu.omnicore.api.color.OmniColor;
 import dev.foxgirl.loadingbackgrounds.util.DrawStatus;
 import dev.foxgirl.loadingbackgrounds.util.LoadingBackgroundsConfig;
@@ -11,6 +13,7 @@ import dev.foxgirl.loadingbackgrounds.util.Position;
 import dev.foxgirl.loadingbackgrounds.util.TextureInfo;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -138,6 +141,7 @@ public final class LoadingBackgroundsScreen extends Screen {
     public boolean drawCustomBackground(final GuiGraphics graphics, final Screen screen, final ResourceLocation texture, final float brightness, final float opacity) {
         this.initFromScreen(screen);
         if (texture == null || texture.equals(MissingTextureAtlasSprite.getLocation())) {
+            System.out.println("Failed to draw texture");
             return false;
         }
 
@@ -147,33 +151,36 @@ public final class LoadingBackgroundsScreen extends Screen {
         float textureWidth = textureInfo.loadingbackgrounds$getWidth();
         float textureHeight = textureInfo.loadingbackgrounds$getHeight();
         if (textureWidth <= 0 || textureHeight <= 0) {
+            System.out.println("Failed to draw texture: Texture size is <=0");
             return false;
         } else {
-            // Calculate scale factors
-            float scaleX = screen.width / textureWidth;
-            float scaleY = screen.height / textureHeight;
-
-            // Check if the texture aspect ratio matches the screen aspect ratio
-            if (scaleX < scaleY) {
-                // The texture is wider than the screen, so we need to adjust the scale and offset
-                scaleX = scaleY;
-            } else {
-                // The texture is taller than the screen or has the same aspect ratio, so we adjust the scale and offset accordingly
-                scaleY = scaleX;
-            }
-
             final OmniRenderingContext context = OmniRenderingContext.from(graphics);
-            final OmniColor color = OmniColor.rgba((int) (brightness * 255), (int) (brightness * 255), (int) (brightness * 255), (int) (opacity * 255));
-            context.renderTexture(
-                OmniRenderPipelines.TEXTURED,
-                texture,
-                0, 0,
-                screen.width, screen.height,
-                0, 0,
-                (int) (textureWidth * scaleX),
-                (int) (textureHeight * scaleY),
-                color
-            );
+            ImmediateScreenRenderer.render(context, () -> {
+                // Calculate scale factors
+                float scaleX = screen.width / textureWidth;
+                float scaleY = screen.height / textureHeight;
+
+                // Check if the texture aspect ratio matches the screen aspect ratio
+                if (scaleX < scaleY) {
+                    // The texture is wider than the screen, so we need to adjust the scale and offset
+                    scaleX = scaleY;
+                } else {
+                    // The texture is taller than the screen or has the same aspect ratio, so we adjust the scale and offset accordingly
+                    scaleY = scaleX;
+                }
+
+                final OmniColor color = OmniColor.rgba((int) (brightness * 255), (int) (brightness * 255), (int) (brightness * 255), (int) (opacity * 255));
+                context.renderTexture(
+                    OmniRenderPipelines.TEXTURED,
+                    texture,
+                    0, 0,
+                    screen.width, screen.height,
+                    0, 0,
+                    (int) (textureWidth * scaleX),
+                    (int) (textureHeight * scaleY),
+                    color
+                );
+            });
 
             return true;
         }

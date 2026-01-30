@@ -9,18 +9,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(SimpleTexture.class)
 public abstract class MixinSimpleTexture extends AbstractTexture implements TextureInfo {
-    // TODO?
-   /*@ModifyVariable(method = "load", at = @At(value = "STORE", ordinal = 1))
-    private ResourceManager loadingimages$onLoadTextureData(final ResourceManager value) {
-        var image = resourceManager.ima.image;
-        if (image != null) {
-            loadingbackgrounds$dataWidth = image.getWidth();
-            loadingbackgrounds$dataHeight = image.getHeight();
-        }
-
-        return textureData;
-    }*/
-
     @Unique
     private int loadingbackgrounds$dataWidth = -1;
 
@@ -46,7 +34,7 @@ public abstract class MixinSimpleTexture extends AbstractTexture implements Text
             /*this.bind();
              *///?}
 
-            var buffer = new int[1];
+            final int[] buffer = new int[1];
 
             GL11.glGetTexLevelParameteriv(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH, buffer);
             loadingbackgrounds$dataWidth = buffer[0];

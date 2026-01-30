@@ -6,7 +6,6 @@ import dev.foxgirl.loadingbackgrounds.util.Position;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.LevelLoadTracker;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,12 +28,12 @@ public abstract class MixinLevelLoadingScreen extends Screen {
 
     //? >=1.21.9 {
     @Shadow(aliases = "loadTracker")
-    private LevelLoadTracker levelLoadingProgress;
-    //? } else {
+    private net.minecraft.client.multiplayer.LevelLoadTracker levelLoadingProgress;
+    //?} else {
     /*@Shadow(aliases = "progressListener")
     @org.spongepowered.asm.mixin.Final
-    private net.minecraft.server.level.progress.StoringChunkProgressListener; levelLoadingProgress;
-    *///? }
+    private net.minecraft.server.level.progress.StoringChunkProgressListener levelLoadingProgress;
+    *///?}
 
     @ModifyVariable(method = "render", at = @At("STORE"), name = "i")
     private int loadingbackgrounds$render$0(final int x) {
@@ -44,9 +43,9 @@ public abstract class MixinLevelLoadingScreen extends Screen {
             final int size =
                 //? >=1.21.9 {
                 (int) this.levelLoadingProgress.serverProgress();
-                //? } else {
+                //?} else {
                 /*this.levelLoadingProgress.getDiameter();
-                *///? }
+                *///?}
             switch (position.ordinal()) {
                 case 1:
                 case 3:
@@ -68,9 +67,9 @@ public abstract class MixinLevelLoadingScreen extends Screen {
             final int size =
                 //? >=1.21.9 {
                 (int) this.levelLoadingProgress.serverProgress();
-                //? } else {
+                //?} else {
                 /*this.levelLoadingProgress.getDiameter();
-                 *///? }
+                 *///?}
             switch (position.ordinal()) {
                 case 1:
                 case 2:
